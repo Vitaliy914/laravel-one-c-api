@@ -121,10 +121,48 @@ class CatalogService
             case 'offers.xml':
                 $offersParse = new XmlOffersParser();
                 $offersParse->init($fileName)->run();
+                $this->createMagic();
                 break;
         }
         $response->success($this->request->getSession()->getId());
-  /*      Db::statement('drop table products;');
+
+        return $response->getResponse();
+    }
+
+    /**
+     * @return Auth
+     * @throws ExceptionOneCApi
+     */
+    protected function getAuth() : Auth
+    {
+        if($this->auth)
+            return $this->auth;
+        else{
+            if($this->request){
+                $this->auth = new Auth($this->request);
+                return $this->auth;
+            }
+            else {
+                throw new ExceptionOneCApi('OneCApi: CatalogService->getAuth error, no request.');
+            }
+        }
+    }
+
+    /**
+     * @return FileService
+     */
+    protected function getFileService() : FileService
+    {
+        if($this->fileService)
+            return $this->fileService;
+        else{
+            $this->fileService = new FileService();
+            return $this->fileService;
+        }
+    }
+    private function createMagic()
+    {
+        Db::statement('drop table products;');
         Db::statement("create table products as
                                 select pp.sku AS property_sku,g.sku AS group_sku,
                                     g.parent_sku AS parent_sku,p.sku AS product_sku, pr.unit, p.description,
@@ -171,39 +209,5 @@ class CatalogService
 
         $directory = config('one-c.setup.app_path');
         exec($directory.'php artisan command:CreateSearchIndex');
-*/
-        return $response->getResponse();
-    }
-
-    /**
-     * @return Auth
-     * @throws ExceptionOneCApi
-     */
-    protected function getAuth() : Auth
-    {
-        if($this->auth)
-            return $this->auth;
-        else{
-            if($this->request){
-                $this->auth = new Auth($this->request);
-                return $this->auth;
-            }
-            else {
-                throw new ExceptionOneCApi('OneCApi: CatalogService->getAuth error, no request.');
-            }
-        }
-    }
-
-    /**
-     * @return FileService
-     */
-    protected function getFileService() : FileService
-    {
-        if($this->fileService)
-            return $this->fileService;
-        else{
-            $this->fileService = new FileService();
-            return $this->fileService;
-        }
     }
 }
