@@ -58,7 +58,9 @@ class XmlOffersParser extends Xml
      */
     public function shops() : XmlOffersParser
     {
-        $this->shopsParser->run($this->xml->{'ПакетПредложений'}->{'Магазины'}->{'Магазин'});
+        var_dump($this->xml); exit;
+        if(isset($this->xml->{'ПакетПредложений'}->{'Магазины'}->{'Магазин'}))
+            $this->shopsParser->run($this->xml->{'ПакетПредложений'}->{'Магазины'}->{'Магазин'});
         return $this;
     }
 
