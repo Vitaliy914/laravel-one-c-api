@@ -1,6 +1,10 @@
 {
     "name": "vitaliy914/laravel-one-c-api",
-    "description": "1",
+    "description": "1C Api",
+    "type": "library",
+    "keywords": ["laravel", "1c", "xml", "parser"],
+    "version": "1.1.0",
+    "license": "MIT",
     "autoload": {
         "psr-4": {
             "Vitaliy914\\LaravelOneCApi\\": "src/"
@@ -12,8 +16,19 @@
             "email": "vitaliy914@gmail.com"
         }
     ],
-    "minimum-stability": "RC",
-    "require": {},
+    "minimum-stability": "stable",
+    "require": {
+        "php": ">=7.2",
+        "laravel/framework": "^8.0",
+        "ext-zip": "*"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Vitaliy914\\OneCApi\\OneCApiServiceProvider"
+            ]
+        }
+    },
     "repositories": [
         {
             "type": "vcs",
