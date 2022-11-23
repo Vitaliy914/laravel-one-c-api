@@ -13,6 +13,7 @@ use Vitaliy914\OneCApi\Parser\XmlOffersParser;
 use Vitaliy914\OneCApi\Response;
 use Vitaliy914\OneCApi\Helpers\StringHelper;
 use Symfony\Component\HttpFoundation\Request;
+use Illuminate\Support\Facades\Cache;
 
 class CatalogService
 {
@@ -235,7 +236,7 @@ class CatalogService
                         select m.id from full_menus m
                         join q on q.slug = m.slug and q.sku=m.tree_sku;');
         Db::statement('delete from full_menus where id not in(select id from menu_not_del );');
-
+        Cache::flush();
         $directory = config('one-c.setup.app_path');
         exec($directory . 'php artisan command:CreateSearchIndex');
     }
