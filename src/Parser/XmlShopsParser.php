@@ -9,14 +9,10 @@ class XmlShopsParser
     use XmlModel;
     use XmlObserver;
 
-    private $shopsParser;
 
     public function __construct()
     {
         $this->initModel('shops');
-
-        \Log::debug('shops init');
-        $this->shopsParser = new XmlShopsParser();
     }
 
     /**
@@ -37,7 +33,7 @@ class XmlShopsParser
                     $item->update();
                 } else { // если нет, создаем новую запись
                     $item = new $this->model();
-                    $item->setAttribute($this->id, (string)$shop->{'Ид'});
+                    $item->setAttribute($this->id, $id);
                     $item->fill(
                         $this->setModel($shop)
                     );

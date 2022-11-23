@@ -11,7 +11,6 @@ class XmlPriceTypeParser
 
     public function __construct()
     {
-        \Log::debug('XmlPriceTypeParser construct');
         $this->initModel('price_type');
         $this->initObserver('price_type');
     }
