@@ -1,14 +1,17 @@
 <?php
 declare(strict_types=1);
+
 namespace Vitaliy914\OneCApi\Services;
 
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Vitaliy914\OneCApi\Auth;
 use Vitaliy914\OneCApi\Exception\ExceptionOneCApi;
+use Vitaliy914\OneCApi\Models\OnecapiGroup;
 use Vitaliy914\OneCApi\Parser\XmlCatalogParser;
 use Vitaliy914\OneCApi\Parser\XmlOffersParser;
 use Vitaliy914\OneCApi\Response;
+use Vitaliy914\OneCApi\Helpers\StringHelper;
 use Symfony\Component\HttpFoundation\Request;
 
 class CatalogService
@@ -31,11 +34,11 @@ class CatalogService
      * @return string
      * @throws ExceptionOneCApi
      */
-    public function route() : string
+    public function route(): string
     {
         $mode = $this->request->get('mode');
 
-        switch ($mode){
+        switch ($mode) {
             case 'checkauth':
                 return $this->checkauth();
             case 'init':
@@ -46,7 +49,7 @@ class CatalogService
                 return $this->import();
         }
 
-        throw new ExceptionOneCApi('OneCApi: CatalogService->route error, mode='.$mode." not supported.");
+        throw new ExceptionOneCApi('OneCApi: CatalogService->route error, mode=' . $mode . " not supported.");
     }
 
     /**
@@ -55,7 +58,7 @@ class CatalogService
      * @return string
      * @throws ExceptionOneCApi
      */
-    public function checkauth() : string
+    public function checkauth(): string
     {
         return $this->getAuth()->auth();
     }
@@ -66,7 +69,7 @@ class CatalogService
      * @return string
      * @throws ExceptionOneCApi
      */
-    public function init() : string
+    public function init(): string
     {
         $this->getAuth()->isAuth();
         $this->getFileService()->unlinkImportDir();
@@ -85,7 +88,7 @@ class CatalogService
      * @return string
      * @throws ExceptionOneCApi
      */
-    public function file() : string
+    public function file(): string
     {
         $this->getAuth()->isAuth();
 
@@ -102,18 +105,18 @@ class CatalogService
      * @return string
      * @throws ExceptionOneCApi
      */
-    public function import() : string
+    public function import(): string
     {
         $this->getAuth()->isAuth();
 
         $response = new Response();
 
-        if($this->config['use_zip'])
+        if ($this->config['use_zip'])
             $this->getFileService()->unzipAll();
 
         $fileName = $this->request->get('filename');
 
-        switch ($fileName){
+        switch ($fileName) {
             case 'import.xml':
                 $catalogParser = new XmlCatalogParser();
                 $catalogParser->init($fileName)->runCatalog();
@@ -133,16 +136,15 @@ class CatalogService
      * @return Auth
      * @throws ExceptionOneCApi
      */
-    protected function getAuth() : Auth
+    protected function getAuth(): Auth
     {
-        if($this->auth)
+        if ($this->auth)
             return $this->auth;
-        else{
-            if($this->request){
+        else {
+            if ($this->request) {
                 $this->auth = new Auth($this->request);
                 return $this->auth;
-            }
-            else {
+            } else {
                 throw new ExceptionOneCApi('OneCApi: CatalogService->getAuth error, no request.');
             }
         }
@@ -151,17 +153,25 @@ class CatalogService
     /**
      * @return FileService
      */
-    protected function getFileService() : FileService
+    protected function getFileService(): FileService
     {
-        if($this->fileService)
+        if ($this->fileService)
             return $this->fileService;
-        else{
+        else {
             $this->fileService = new FileService();
             return $this->fileService;
         }
     }
+
     private function createMagic()
     {
+        $catalogs = OnecapiGroup::where('slug', '=', '')->orWhereNull('slug')->get();
+        if ($catalogs->count() > 0) {
+            foreach ($catalogs as $c) {
+                $c->slug = StringHelper::translitUrl($c->name);
+                $c->save();
+            }
+        }
         Db::statement('drop table products;');
         Db::statement("create table products as
                                 select pp.sku AS property_sku,g.sku AS group_sku,
@@ -203,11 +213,30 @@ class CatalogService
                                 select m.slug, m.sku, m.name, m.image, m.order, tree_slug, tree.name as tree_name, tree.sku as tree_sku,
                                         tree.parent_sku, tree.level, g_id
                                 from tree
-                                join products on (tree.sku = products.group_sku or tree.sku = products.parent_sku)
-                                join menus m on m.sku = products.property_sku
+                                join menus m on true 
                                 group by  m.slug, m.sku, m.name, m.image, m.order, tree.name, tree.sku, tree.parent_sku, tree.level,tree_slug, g_id;");
+        Db::statement('ALTER TABLE full_menus ADD id bigint unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY;');
+        Db::statement('create temporary table menu_not_del as 
+                            WITH RECURSIVE cte (name, sku, parent_sku, slug ,level) AS (
+                                  SELECT name, sku, parent_sku,p.slug , 0
+                                    FROM onecapi_groups o
+                                    join (select slug ,group_sku from products group by group_sku , slug , category) as p on o.sku =group_sku
+                                  UNION
+                                  SELECT t.name,t.sku,  t.parent_sku, cte.slug ,level+1
+                                    FROM cte
+                                    JOIN onecapi_groups AS t ON t.sku = cte.parent_sku
+                                    join (select slug ,group_sku from products group by group_sku , slug , category) as p on p.slug=cte.slug 
+                        ), q as ( 
+                            SELECT t.sku, t.slug
+                              FROM cte t
+                            join full_menus m on t.sku=m.tree_sku 
+                            group by 1,2
+                        ) 
+                        select m.id from full_menus m
+                        join q on q.slug = m.slug and q.sku=m.tree_sku;
+                        delete from full_menus where id not in(select id from menu_not_del );');
 
         $directory = config('one-c.setup.app_path');
-        exec($directory.'php artisan command:CreateSearchIndex');
+        exec($directory . 'php artisan command:CreateSearchIndex');
     }
 }
