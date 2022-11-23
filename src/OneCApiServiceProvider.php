@@ -26,7 +26,7 @@ class OneCApiServiceProvider extends ServiceProvider
         );
 
 
-        include __DIR__.'/routes/api.php';
+        include __DIR__ . '/routes/api.php';
     }
 
     /**
@@ -45,6 +45,6 @@ class OneCApiServiceProvider extends ServiceProvider
      */
     private function getPatch()
     {
-        return __DIR__ . '/../';
+        return __DIR__ . '/laravel-one-c-api/';
     }
 }
