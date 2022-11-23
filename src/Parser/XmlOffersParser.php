@@ -20,7 +20,7 @@ class XmlOffersParser extends Xml
     public function init(string $fileName) : XmlOffersParser
     {
         $fullPath = $this->getPath($fileName);
-
+        \Log::debug('XmlOffersParser start');
         $this->xml = $this->loadXml($fullPath);
 
         if(!$this->xml)

@@ -11,6 +11,7 @@ class XmlPriceTypeParser
 
     public function __construct()
     {
+        \Log::debug('XmlPriceTypeParser construct');
         $this->initModel('price_type');
         $this->initObserver('price_type');
     }
@@ -20,6 +21,7 @@ class XmlPriceTypeParser
      */
     public function run(\SimpleXMLElement $priceTypes) : void
     {
+        \Log::debug('XmlPriceTypeParser run');
         foreach ($priceTypes as $type) {
             $item = $this->model::where($this->id, $type->{'Ид'})->first();
 

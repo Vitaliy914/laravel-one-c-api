@@ -124,7 +124,7 @@ class CatalogService
                 break;
         }
         $response->success($this->request->getSession()->getId());
-        Db::statement('drop table products;');
+  /*      Db::statement('drop table products;');
         Db::statement("create table products as
                                 select pp.sku AS property_sku,g.sku AS group_sku,
                                     g.parent_sku AS parent_sku,p.sku AS product_sku, pr.unit, p.description,
@@ -171,7 +171,7 @@ class CatalogService
 
         $directory = config('one-c.setup.app_path');
         exec($directory.'php artisan command:CreateSearchIndex');
-
+*/
         return $response->getResponse();
     }
 
