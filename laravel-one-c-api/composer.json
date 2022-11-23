@@ -1,0 +1,23 @@
+{
+    "name": "vitaliy914/laravel-one-c-api",
+    "description": "1",
+    "autoload": {
+        "psr-4": {
+            "Vitaliy914\\LaravelOneCApi\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Nikitin Vitaliy",
+            "email": "vitaliy914@gmail.com"
+        }
+    ],
+    "minimum-stability": "RC",
+    "require": {},
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "git@github.com:vitaliy914/laravel-one-c-api.git"
+        }
+    ]
+}
