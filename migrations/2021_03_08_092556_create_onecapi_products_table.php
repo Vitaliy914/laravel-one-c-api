@@ -18,6 +18,7 @@ class CreateOnecapiProductsTable extends Migration
             $table->string('sku')->index();
             $table->string('group_sku')->nullable()->index();
             $table->string('name');
+            $table->text('description')->nullable();
             $table->string('art')->nullable();
             $table->string('barcode')->nullable();
             $table->integer('residue')->nullable()->default(0);
