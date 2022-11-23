@@ -233,8 +233,8 @@ class CatalogService
                             group by 1,2
                         ) 
                         select m.id from full_menus m
-                        join q on q.slug = m.slug and q.sku=m.tree_sku;
-                        delete from full_menus where id not in(select id from menu_not_del );');
+                        join q on q.slug = m.slug and q.sku=m.tree_sku;');
+        Db::statement('delete from full_menus where id not in(select id from menu_not_del );');
 
         $directory = config('one-c.setup.app_path');
         exec($directory . 'php artisan command:CreateSearchIndex');
