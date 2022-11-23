@@ -35,22 +35,22 @@ class XmlResidueParser
 
                 // если найден то обновляем только филлабле поля
                 if ($item) {
-                    $item->fill(
-                        $this->setModel($product)
-                    );
-
-                    $this->runObserver('updating', $item, $product);
-
-                    $item->update();
-
-                    $this->runObserver('updated', $item, $product);
+//                    $item->fill(
+//                        $this->setModel($product)
+//                    );
+//
+//                    $this->runObserver('updating', $item, $product);
+//
+//                    $item->update();
+//
+//                    $this->runObserver('updated', $item, $product);
 
                     if (isset($product->{'Цены'}->{'Цена'}))
                         $this->priceParser->run($product->{'Цены'}->{'Цена'}, $id);
+                    if (isset($product->{'Количество'}->{'Магазин'}))
+                        $this->leftoversParser->run($product->{'Количество'}->{'Магазин'}, $id);
 
                 }
-                if (isset($product->{'Количество'}->{'Магазин'}))
-                    $this->leftoversParser->run($product->{'Количество'}->{'Магазин'}, $id);
             }
         }
     }
