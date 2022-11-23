@@ -54,12 +54,12 @@ class XmlOffersParser extends Xml
     }
 
     /**
-     * Парсим типы цен
+     * Парсим магазины
      * @return XmlOffersParser
      */
     public function shops() : XmlOffersParser
     {
-        $this->shopsParser->run($this->xml->{'Магазины'}->{'Магазин'});
+        $this->shopsParser->run($this->xml->{'ПакетПредложений'}->{'Магазины'}->{'Магазин'});
         return $this;
     }
 

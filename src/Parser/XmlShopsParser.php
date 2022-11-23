@@ -15,6 +15,7 @@ class XmlShopsParser
     {
         $this->initModel('shops');
 
+        \Log::debug('shops init');
         $this->shopsParser = new XmlShopsParser();
     }
 
@@ -24,6 +25,7 @@ class XmlShopsParser
      */
     public function run(\SimpleXMLElement $shops) : void
     {
+        \Log::debug('shops start');
         foreach ($shops as $shop) {
             $shopId = explode('#', (string)$shop->{'Ид'});
             foreach ($shopId as $id) {

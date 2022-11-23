@@ -12,6 +12,8 @@ class XmlLeftoversParser
     public function __construct()
     {
         $this->initModel('leftovers');
+
+        \Log::debug('leftovers init');
     }
 
     /**
@@ -21,6 +23,7 @@ class XmlLeftoversParser
      */
     public function run(\SimpleXMLElement $leftovers, string $productId) : void
     {
+        \Log::debug('leftovers start');
         // если класс не определен то не парсим просто выходим без ошибок
         if(!$this->isInstantiable()) {
             return;
