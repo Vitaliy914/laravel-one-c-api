@@ -16,7 +16,7 @@ class CreateOnecapiPropertiesTable extends Migration
         Schema::create('onecapi_properties', function (Blueprint $table) {
             $table->id();
             $table->string('sku')->index();
-            $table->string('name');
+            $table->string('name')->nullable();
             $table->timestamps();
         });
     }

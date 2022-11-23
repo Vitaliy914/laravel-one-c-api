@@ -10,6 +10,8 @@ class XmlOffersParser extends Xml
 
     private $residueParser;
 
+    private $shopsParser;
+
     /**
      * @param string $fileName
      * @return XmlOffersParser

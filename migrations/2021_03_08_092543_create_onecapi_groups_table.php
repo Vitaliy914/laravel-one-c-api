@@ -16,7 +16,7 @@ class CreateOnecapiGroupsTable extends Migration
         Schema::create('onecapi_groups', function (Blueprint $table) {
             $table->id();
             $table->string('sku')->index();
-            $table->string('slug')->index();
+            $table->string('slug')->nullable()->index();
             $table->string('parent_sku')->nullable()->index();
             $table->string('name');
             $table->timestamps();
