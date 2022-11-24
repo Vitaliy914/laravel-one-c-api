@@ -180,6 +180,7 @@ class CatalogService
                                     g.name AS gname,p.name AS name, p.art AS art,p.barcode AS barcode,
                                     pp.name AS property_name,REPLACE(i.name,'import_files','images') AS image,
                                     m.slug, concat(g.id,'-',g.slug) as category, pr.price_per_unit, pr.currency,
+                                       pr.price_with_discount, pr.discount,
                                     p.created_at, p.updated_at
                                 from onecapi_products p
                                 join onecapi_groups g on g.sku = p.group_sku
