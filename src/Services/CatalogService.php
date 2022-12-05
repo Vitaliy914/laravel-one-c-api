@@ -190,17 +190,26 @@ class CatalogService
                                 join menus m on m.sku = pp.sku
                                 left join onecapi_images i on p.id = i.product_id
                                 where  (ppv.property_variant_sku = 'true')");
+        Db::statement('ALTER TABLE products CHANGE price_with_discount price_with_discount float NULL AFTER currency;');
         Db::statement('CREATE INDEX product_sku ON products(product_sku);');
         Db::statement('CREATE INDEX slug ON products(slug);');
         Db::statement('CREATE INDEX category ON products(category);');
         Db::statement('CREATE INDEX price_per_unit ON products(price_per_unit);');
         Db::statement('CREATE INDEX created_at ON products(created_at);');
-        Db::statement('CREATE INDEX product_name ON products(`name`);');
+        Db::statement('CREATE INDEX product_name ON products(name);');
         Db::statement('CREATE INDEX group_sku ON products(group_sku);');
         Db::statement('CREATE INDEX slug_category ON products(slug,category);');
         Db::statement('CREATE INDEX parent_sku ON products(parent_sku);');
         Db::statement('CREATE INDEX property_sku ON products(property_sku);');
 
+        Db::statement('Drop view attributes;');
+        Db::statement("create view attributes as 
+                            select pvv.id AS id,pv.product_sku AS product_sku,pvv.name AS value,p.name AS atribut 
+                            from onecapi_property_variants pvv 
+                            join onecapi_property_values pv on pv.property_variant_sku = pvv.property_sku
+                            join onecapi_properties p on p.sku = pvv.sku
+                            where p.name = 'Производитель_';
+                        ");
         Db::statement('Drop table full_menus;');
 
         Db::statement("create table full_menus as
