@@ -83,8 +83,5 @@ class XmlProductParser
                 );
             }
         }
-        $directory = config('one-c.setup.app_path');
-        $cmd = "cp -nR ".$directory."/storage/app/onec/import_files/. ".$directory."storage/app/public/images/";
-        exec($cmd);
    }
 }

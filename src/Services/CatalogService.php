@@ -248,6 +248,6 @@ class CatalogService
         Db::statement('delete from full_menus where id not in(select id from menu_not_del );');
         Cache::flush();
         $directory = config('one-c.setup.app_path');
-        exec($directory . 'php artisan command:CreateSearchIndex');
+        exec('php '.$directory .'artisan command:copyImages:cron');
     }
 }
