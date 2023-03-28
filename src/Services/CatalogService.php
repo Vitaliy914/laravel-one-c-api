@@ -216,7 +216,7 @@ class CatalogService
                                 with recursive tree (tree_slug,name, sku, parent_sku, level, g_id )
                                 as (select concat(id,'-',slug), name, sku,parent_sku, 0, id
                                    from onecapi_groups
-                                   where parent_sku is null
+                                   where parent_sku is null or parent_sku = ''
                                 union all
                                    select concat(id,'-',slug), onecapi_groups.name, onecapi_groups.sku, onecapi_groups.parent_sku, tree.level + 1, id
                                    from onecapi_groups
