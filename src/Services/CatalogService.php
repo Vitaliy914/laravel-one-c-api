@@ -246,6 +246,7 @@ class CatalogService
                         select m.id from full_menus m
                         join q on q.slug = m.slug and q.sku=m.tree_sku;');
         Db::statement('delete from full_menus where id not in(select id from menu_not_del );');
+        Db::statement('update onecapi_products_in_shops set count = 0 where true;;');
         Db::statement("delete from `full_menus` WHERE `tree_name` = 'Аквариумистика' AND `slug` != 'fishes';");
         Db::statement("delete from `full_menus` WHERE `tree_name` = 'Одежда' AND `slug` = 'farm_animals';");
         Db::statement("delete from `full_menus` WHERE `tree_name` = 'Премиксы для сельскохозяйственных животных и птиц' AND (`slug` = 'cats' OR `slug` = 'dogs');");
