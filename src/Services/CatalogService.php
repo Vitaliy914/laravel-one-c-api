@@ -252,6 +252,6 @@ class CatalogService
         Db::statement("delete from `full_menus` WHERE `tree_name` = 'Премиксы для сельскохозяйственных животных и птиц' AND (`slug` = 'cats' OR `slug` = 'dogs');");
         Cache::flush();
         $directory = config('one-c.setup.app_path');
-        exec('php '.$directory .'artisan command:copyImages:cron');
+        exec('php '.$directory .'artisan command:CreateSearchIndex');
     }
 }
