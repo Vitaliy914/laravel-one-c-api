@@ -41,6 +41,7 @@ class XmlCatalogParser extends Xml
             ->groups()
             ->properties();
         $this->products->run($this->xml->{'Каталог'}->{'Товары'}->{'Товар'});
+        \Log::debug('Import groups completed');
     }
 
     /**
@@ -51,6 +52,7 @@ class XmlCatalogParser extends Xml
         $this->classifier = new XmlClassifierParser(
             isset($this->xml->{'Классификатор'})?$this->xml->{'Классификатор'}:null
             );
+        \Log::debug('Import Classifier completed');
     }
 
     /**
@@ -59,5 +61,6 @@ class XmlCatalogParser extends Xml
     private function setProducts() : void
     {
         $this->products = new XmlProductParser();
+        \Log::debug('Import Products completed');
     }
 }

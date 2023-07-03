@@ -123,7 +123,7 @@ class CatalogService
                 $catalogParser->init($fileName)->runCatalog();
                 break;
             case 'offers.xml':
-                Db::statement('update onecapi_products_in_shops set count = 0 where true;;');
+                Db::statement('update onecapi_products_in_shops set count = 0 where true;');
                 $offersParse = new XmlOffersParser();
                 $offersParse->init($fileName)->run();
                 $this->createMagic();

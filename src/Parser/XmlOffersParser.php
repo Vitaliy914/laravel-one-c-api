@@ -49,6 +49,7 @@ class XmlOffersParser extends Xml
     public function priceType() : XmlOffersParser
     {
         $this->priceTypeParser->run($this->xml->{'ПакетПредложений'}->{'ТипыЦен'}->{'ТипЦены'});
+        \Log::debug('Import priceType completed');
         return $this;
     }
 
@@ -60,6 +61,7 @@ class XmlOffersParser extends Xml
     {
         if(isset($this->xml->{'ПакетПредложений'}->{'Магазины'}->{'Магазин'}))
             $this->shopsParser->run($this->xml->{'ПакетПредложений'}->{'Магазины'}->{'Магазин'});
+        \Log::debug('Import shops completed');
         return $this;
     }
 
@@ -70,6 +72,7 @@ class XmlOffersParser extends Xml
     public function offer() : XmlOffersParser
     {
         $this->residueParser->run($this->xml->{'ПакетПредложений'}->{'Предложения'}->{'Предложение'});
+        \Log::debug('Import  offer completed');
         return $this;
     }
 }
