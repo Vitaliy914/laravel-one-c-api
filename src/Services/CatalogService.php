@@ -175,6 +175,7 @@ class CatalogService
             }
         }
         Db::statement('drop table products;');
+        Db::statement("delete  FROM `onecapi_property_values` WHERE `property_variant_sku` = 'false' or  `property_variant_sku` = '';");
         Db::statement("create table products as
                                 select pp.sku AS property_sku,g.sku AS group_sku,
                                     g.parent_sku AS parent_sku,p.sku AS product_sku, pr.unit, p.description,
