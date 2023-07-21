@@ -53,6 +53,7 @@ class CatalogService
         throw new ExceptionOneCApi('OneCApi: CatalogService->route error, mode=' . $mode . " not supported.");
     }
 
+
     /**
      * ?type=catalog&mode=checkauth
      *
@@ -254,8 +255,6 @@ class CatalogService
         Cache::flush();
         $directory = config('one-c.setup.app_path');
         $c = shell_exec('./copy.sh');
-        \Log::debug('dir = '. $directory);
         return $c ?? 'qq';
-
     }
 }
