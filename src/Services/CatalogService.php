@@ -38,7 +38,7 @@ class CatalogService
     public function route(): string
     {
         $mode = $this->request->get('mode');
-
+        set_time_limit(0);
         switch ($mode) {
             case 'checkauth':
                 return $this->checkauth();
@@ -194,7 +194,6 @@ class CatalogService
                                 left join onecapi_images i on p.id = i.product_id
                                 where  (ppv.property_variant_sku = 'true')");
         Db::statement('ALTER TABLE products CHANGE price_with_discount price_with_discount float NULL AFTER currency;');
-        Db::statement('ALTER TABLE products ADD id int NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST;');
         Db::statement('CREATE INDEX product_sku ON products(product_sku);');
         Db::statement('CREATE INDEX slug ON products(slug);');
         Db::statement('CREATE INDEX category ON products(category);');
@@ -205,6 +204,7 @@ class CatalogService
         Db::statement('CREATE INDEX slug_category ON products(slug,category);');
         Db::statement('CREATE INDEX parent_sku ON products(parent_sku);');
         Db::statement('CREATE INDEX property_sku ON products(property_sku);');
+        Db::statement('ALTER TABLE products ADD id int NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST;');
 
         Db::statement('Drop view attributes;');
         Db::statement("create view attributes as 
