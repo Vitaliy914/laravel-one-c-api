@@ -194,7 +194,7 @@ class CatalogService
                                 left join onecapi_images i on p.id = i.product_id
                                 where  (ppv.property_variant_sku = 'true')");
         Db::statement('ALTER TABLE products CHANGE price_with_discount price_with_discount float NULL AFTER currency;');
-        Db::statement('ALTER TABLE `products` ADD `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST;');
+        Db::statement('ALTER TABLE products ADD id int NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST;');
         Db::statement('CREATE INDEX product_sku ON products(product_sku);');
         Db::statement('CREATE INDEX slug ON products(slug);');
         Db::statement('CREATE INDEX category ON products(category);');
