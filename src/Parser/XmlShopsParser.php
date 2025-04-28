@@ -25,7 +25,7 @@ class XmlShopsParser
         foreach ($shops as $shop) {
             $shopId = explode('#', (string)$shop->{'Ид'});
             foreach ($shopId as $id) {
-                $item = $this->model::where($this->id, $id)->first();
+                $item = $this->model::where('shop_sku', $id)->first();
                 if ($item) {
                     $item->fill(
                         $this->setModel($shop)

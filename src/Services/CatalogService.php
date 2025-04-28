@@ -168,6 +168,8 @@ class CatalogService
 
     private function createMagic()
     {
+
+        \Log::debug('magic start');
         $catalogs = OnecapiGroup::where('slug', '=', '')->orWhereNull('slug')->get();
         if ($catalogs->count() > 0) {
             foreach ($catalogs as $c) {
@@ -176,7 +178,7 @@ class CatalogService
             }
         }
         Db::statement('drop table products;');
-        Db::statement("delete  FROM `onecapi_property_values` WHERE `property_variant_sku` = 'false' or  `property_variant_sku` = '';");
+        Db::statement("delete  FROM `onecapi_property_values` WHERE `property_variant_sku` = 'Нет' or  `property_variant_sku` = '';");
         Db::statement("create table products as
                                 select pp.sku AS property_sku,g.sku AS group_sku,
                                     g.parent_sku AS parent_sku,p.sku AS product_sku, pr.unit, p.description,
@@ -192,7 +194,7 @@ class CatalogService
                                 join onecapi_prices pr on pr.product_sku = p.sku
                                 join menus m on m.sku = pp.sku
                                 left join onecapi_images i on p.id = i.product_id
-                                where  (ppv.property_variant_sku = 'true')");
+                                where  (ppv.property_variant_sku = 'Да');");
         Db::statement('ALTER TABLE products CHANGE price_with_discount price_with_discount float NULL AFTER currency;');
         Db::statement('CREATE INDEX product_sku ON products(product_sku);');
         Db::statement('CREATE INDEX slug ON products(slug);');
@@ -255,6 +257,8 @@ class CatalogService
         Db::statement("delete from `full_menus` WHERE `tree_name` = 'Премиксы для сельскохозяйственных животных и птиц' AND (`slug` = 'cats' OR `slug` = 'dogs');");
         Cache::flush();
         $c = shell_exec('./copy.sh');
+
+        \Log::debug('Magic completed');
         return $c ?? 'qq';
     }
 }

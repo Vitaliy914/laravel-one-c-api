@@ -11,6 +11,5 @@ class OnecapiShop extends Model
     protected $fillable = [
         'shop_sku',
         'name',
-        'short_name'
     ];
 }

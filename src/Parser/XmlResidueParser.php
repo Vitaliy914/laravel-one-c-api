@@ -37,8 +37,8 @@ class XmlResidueParser
                 if ($item) {
                     if (isset($product->{'Цены'}->{'Цена'}))
                         $this->priceParser->run($product->{'Цены'}->{'Цена'}, $id);
-                    if (isset($product->{'Количество'}->{'Магазин'}))
-                        $this->leftoversParser->run($product->{'Количество'}->{'Магазин'}, $id);
+                    if (isset($product->{'Магазины'}->{'Магазин'}))
+                        $this->leftoversParser->run($product->{'Магазины'}->{'Магазин'}, $id);
 
                 }
             }
